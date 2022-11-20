@@ -43,13 +43,13 @@ class MainActivity : AppCompatActivity() {
     var base64: String? = null
     private lateinit var mSocket: Socket
     var bitmap: Bitmap? = null
-    val itemList = arrayListOf<RecyclerViewData>()      // 아이템 배열
+    var itemList = arrayListOf<RecyclerViewData>()      // 아이템 배열
     val listAdapter = RecyclerViewAdapter(itemList)     // 어댑터
     lateinit var faceList: ArrayList<Int>
     var currentTime : Long = 0
     val dataFormat = SimpleDateFormat("yyyyMMdd-hhmmss")
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -153,9 +153,9 @@ class MainActivity : AppCompatActivity() {
             base64 = bitmapToString(imgBitmap)
 
             mSocket.emit("uploadImg", base64)
-//            bitmap?.let {
-//                binding.choiceImage.setImageBitmap(bitmap)
-//            }
+            bitmap?.let {
+                binding.choiceImage.setImageBitmap(bitmap)
+            }
 
             mSocket.on("get_faces", imageSet)
         }
@@ -193,10 +193,16 @@ class MainActivity : AppCompatActivity() {
             mSocket.on("get_blur", blurImg)
         }
 
-        bin
+        binding.clearButton.setOnClickListener {
+            faceList.clear()
+            itemList.clear()
+            val newItemList = arrayListOf<RecyclerViewData>()
+            itemList = newItemList
 
-        binding.saveButton.setOnClickListener {
-
+            runOnUiThread {
+                listAdapter.notifyDataSetChanged()
+                binding.choiceImage.setImageBitmap(null)
+            }
         }
     }
 

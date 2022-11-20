@@ -35,11 +35,6 @@
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/save_button"
-            android:text="save"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/clear_button"
             android:text="clear"/>
     </LinearLayout>
